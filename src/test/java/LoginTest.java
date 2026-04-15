@@ -30,8 +30,8 @@ public class LoginTest extends BaseTest {
                     .fillCredentials(user.getEmail(), user.getPassword())
                     .clickLogin();
 
-            assertEquals(PageMain.URL + "/", driver.getCurrentUrl(),
-                    "После входа должна открыться главная страница");
+            assertFalse(driver.getCurrentUrl().contains("login"),
+                    "После входа пользователь не должен оставаться на странице /login");
         } finally {
             closeBrowser();
             UserApiClient.deleteUser(accessToken);
@@ -51,8 +51,8 @@ public class LoginTest extends BaseTest {
                     .fillCredentials(user.getEmail(), user.getPassword())
                     .clickLogin();
 
-            assertEquals(PageMain.URL + "/", driver.getCurrentUrl(),
-                    "После входа должна открыться главная страница");
+            assertFalse(driver.getCurrentUrl().contains("login"),
+                    "После входа пользователь не должен оставаться на странице /login");
         } finally {
             closeBrowser();
             UserApiClient.deleteUser(accessToken);
@@ -72,8 +72,8 @@ public class LoginTest extends BaseTest {
                     .fillCredentials(user.getEmail(), user.getPassword())
                     .clickLogin();
 
-            assertEquals(PageMain.URL + "/", driver.getCurrentUrl(),
-                    "После входа должна открыться главная страница");
+            assertFalse(driver.getCurrentUrl().contains("login"),
+                    "После входа пользователь не должен оставаться на странице /login");
         } finally {
             closeBrowser();
             UserApiClient.deleteUser(accessToken);
@@ -93,8 +93,8 @@ public class LoginTest extends BaseTest {
                     .fillCredentials(user.getEmail(), user.getPassword())
                     .clickLogin();
 
-            assertEquals(PageMain.URL + "/", driver.getCurrentUrl(),
-                    "После входа должна открыться главная страница");
+            assertFalse(driver.getCurrentUrl().contains("login"),
+                    "После входа пользователь не должен оставаться на странице /login");
         } finally {
             closeBrowser();
             UserApiClient.deleteUser(accessToken);

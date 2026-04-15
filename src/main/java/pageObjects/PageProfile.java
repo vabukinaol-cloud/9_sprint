@@ -33,18 +33,21 @@ public class PageProfile {
     @Step("Нажать кнопку 'Конструктор' в шапке")
     public PageMain clickConstructorLink() {
         wait.until(ExpectedConditions.elementToBeClickable(constructorLink)).click();
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("account")));
         return new PageMain(driver);
     }
 
     @Step("Нажать на логотип Stellar Burgers")
     public PageMain clickLogo() {
         wait.until(ExpectedConditions.elementToBeClickable(logoButton)).click();
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("account")));
         return new PageMain(driver);
     }
 
     @Step("Нажать кнопку 'Выйти'")
     public PageLogin clickLogout() {
         wait.until(ExpectedConditions.elementToBeClickable(logoutButton)).click();
+        wait.until(ExpectedConditions.urlContains("login"));
         return new PageLogin(driver);
     }
 }

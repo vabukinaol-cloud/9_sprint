@@ -3,9 +3,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.PageRegister;
-import utils.UserGenerator;
 import pojo.UserCreate;
+import utils.UserGenerator;
+
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +30,9 @@ public class RegistrationTest extends BaseTest {
                     .setPassword(user.getPassword())
                     .clickRegisterButton();
 
+            new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(ExpectedConditions.urlContains("/login"));
+
             assertTrue(driver.getCurrentUrl().contains("/login"),
                     "После регистрации должен быть переход на страницу входа");
         } finally {
@@ -35,7 +42,7 @@ public class RegistrationTest extends BaseTest {
 
     @ParameterizedTest(name = "Ошибка при коротком пароле [{0}]")
     @MethodSource("browsers")
-    @DisplayName("Пароль короче 6 символов вызывает ошибку")
+    @DisplayName("Пароль короче 6 символов вызывает ошибку 'Некорректный пароль'")
     void shortPasswordShowsError(String browser) {
         UserCreate user = UserGenerator.getRandomUser();
         openBrowser(browser);

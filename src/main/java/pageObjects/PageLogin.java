@@ -42,6 +42,7 @@ public class PageLogin {
     @Step("Нажать кнопку 'Войти'")
     public PageMain clickLogin() {
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("/login")));
         return new PageMain(driver);
     }
 

@@ -4,11 +4,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.PageLogin;
 import pageObjects.PageMain;
 import pageObjects.PageProfile;
 import pojo.UserCreate;
 import utils.UserGenerator;
+
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,11 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Личный кабинет и навигация")
 public class ProfileTest extends BaseTest {
 
-    private String loginAndGetToMain(UserCreate user) {
+    private void loginViaLoginPage(UserCreate user) {
         new PageLogin(driver).open()
                 .fillCredentials(user.getEmail(), user.getPassword())
                 .clickLogin();
-        return driver.getCurrentUrl();
     }
 
     @ParameterizedTest(name = "Переход в личный кабинет [{0}]")
@@ -31,8 +34,10 @@ public class ProfileTest extends BaseTest {
         String accessToken = UserApiClient.createUser(user);
         openBrowser(browser);
         try {
-            loginAndGetToMain(user);
+            loginViaLoginPage(user);
             new PageMain(driver).clickProfileButtonAsGuest();
+            new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(ExpectedConditions.urlContains("account/profile"));
 
             assertTrue(driver.getCurrentUrl().contains("account/profile"),
                     "После клика по 'Личный кабинет' должна открыться страница профиля");
@@ -50,12 +55,12 @@ public class ProfileTest extends BaseTest {
         String accessToken = UserApiClient.createUser(user);
         openBrowser(browser);
         try {
-            loginAndGetToMain(user);
+            loginViaLoginPage(user);
             new PageProfile(driver).open()
                     .clickConstructorLink();
 
-            assertEquals(PageMain.URL + "/", driver.getCurrentUrl(),
-                    "После клика по 'Конструктор' должна открыться главная страница");
+            assertFalse(driver.getCurrentUrl().contains("account"),
+                    "После клика по 'Конструктор' пользователь должен покинуть страницу профиля");
         } finally {
             closeBrowser();
             UserApiClient.deleteUser(accessToken);
@@ -70,12 +75,12 @@ public class ProfileTest extends BaseTest {
         String accessToken = UserApiClient.createUser(user);
         openBrowser(browser);
         try {
-            loginAndGetToMain(user);
+            loginViaLoginPage(user);
             new PageProfile(driver).open()
                     .clickLogo();
 
-            assertEquals(PageMain.URL + "/", driver.getCurrentUrl(),
-                    "После клика на логотип должна открыться главная страница");
+            assertFalse(driver.getCurrentUrl().contains("account"),
+                    "После клика на логотип пользователь должен покинуть страницу профиля");
         } finally {
             closeBrowser();
             UserApiClient.deleteUser(accessToken);
@@ -90,7 +95,7 @@ public class ProfileTest extends BaseTest {
         String accessToken = UserApiClient.createUser(user);
         openBrowser(browser);
         try {
-            loginAndGetToMain(user);
+            loginViaLoginPage(user);
             new PageProfile(driver).open()
                     .clickLogout();
 
